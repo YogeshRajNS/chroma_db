@@ -16,10 +16,15 @@ CHROMA_DB_DIR = os.getenv("CHROMA_DB_DIR", "chroma_db")
 app = Flask(__name__)
 
 # ---------------- CHROMADB CLIENT ----------------
+# chroma_client = Client(
+#     Settings(
+#         chroma_db_impl="duckdb+parquet",
+#         persist_directory=CHROMA_DB_DIR
+#     )
+# )
 chroma_client = Client(
     Settings(
-        chroma_db_impl="duckdb+parquet",
-        persist_directory=CHROMA_DB_DIR
+        chroma_db_impl="inmemory"  # store everything in RAM
     )
 )
 
@@ -59,7 +64,7 @@ def add_doc():
             ids=[str(abs(hash(text)))]
         )
 
-        chroma_client.persist()
+        #chroma_client.persist()
         return jsonify({"status": "success"}), 200
 
     except Exception as e:
