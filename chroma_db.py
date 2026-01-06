@@ -7,7 +7,6 @@ import os
 from flask import Flask, request, jsonify
 from chromadb import Client
 from chromadb.config import Settings
-from chromadb.utils import embedding_functions
 
 # ---------------- CONFIG ----------------
 CHROMA_DB_DIR = os.getenv("CHROMA_DB_DIR", "chroma_db")
@@ -29,20 +28,22 @@ chroma_client = Client(
 )
 
 # Dummy embedding function (embeddings already provided)
-embedding_fn = embedding_functions.DefaultEmbeddingFunction()
 
 # ---------------- COLLECTION ----------------
 def get_collection():
     try:
-        return chroma_client.get_collection(
-            name="default",
-            embedding_function=embedding_fn
-        )
+        # return chroma_client.get_collection(
+        #     name="default",
+        #     embedding_function=embedding_fn
+        # )
+        return chroma_client.get_collection(name="default")
     except Exception:
-        return chroma_client.create_collection(
-            name="default",
-            embedding_function=embedding_fn
-        )
+        # return chroma_client.create_collection(
+        #     name="default",
+        #     embedding_function=embedding_fn
+        # )
+        return chroma_client.create_collection(name="default")
+
 
 # ---------------- ADD DOCUMENT ----------------
 @app.route("/add_doc", methods=["POST"])
